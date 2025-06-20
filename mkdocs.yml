@@ -1,0 +1,149 @@
+site_name: Verdikta Documentation
+site_description: Complete documentation for the Verdikta ecosystem
+site_author: Verdikta Team
+site_url: https://docs.verdikta.org
+
+# Repository
+repo_name: verdikta/verdikta-docs
+repo_url: https://github.com/verdikta/verdikta-docs
+edit_uri: edit/main/
+
+# Configuration
+theme:
+  name: material
+  features:
+    - announce.dismiss
+    - content.action.edit
+    - content.action.view
+    - content.code.annotate
+    - content.code.copy
+    - content.code.select
+    - content.tooltips
+    - navigation.expand
+    - navigation.footer
+    - navigation.indexes
+    - navigation.sections
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+    - toc.integrate
+  palette:
+    - scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Inter
+    code: JetBrains Mono
+  favicon: overrides/assets/favicon.png
+  logo: overrides/assets/logo.png
+  custom_dir: overrides
+
+# Plugins
+plugins:
+  - monorepo
+  - search:
+      separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+  - minify:
+      minify_html: true
+
+# Customization
+extra:
+  annotate:
+    json: [.s2]
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/verdikta
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/verdikta
+
+# Custom CSS and assets
+extra_css:
+  - assets/stylesheets/verdikta.css
+
+# Static files (this ensures assets are copied)
+extra:
+  annotate:
+    json: [.s2]
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/verdikta
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/verdikta
+
+# Extensions
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      normalize_issue_symbols: true
+      repo_url_shorthand: true
+      user: verdikta
+      repo: verdikta-docs
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Navigation structure for multi-repo content
+nav:
+  - Home: index.md
+  - Overview:
+    - overview/index.md
+    - Architecture: overview/architecture.md
+    - Whitepaper: overview/whitepaper.md
+  - Node Operators: '!include sources/arbiter/installer/docs/mkdocs.yml'
+  - Developers: '!include sources/apps/docs/mkdocs.yml'
+  - Smart Contracts:
+    - Overview: dispatcher/contracts/index.md
+    - Dispatcher: dispatcher/contracts/dispatcher.md
+    - Token & Staking: dispatcher/contracts/token.md
+    - Oracle Registry: dispatcher/contracts/oracle.md
+    - Deployment: dispatcher/contracts/deployment.md
+  - Changelog:
+    - changelog/index.md
+    - Release Notes: changelog/releases.md 

@@ -1,0 +1,14 @@
+{
+  "name": "verdikta-docs",
+  "version": "1.0.0",
+  "description": "Verdikta Documentation Site",
+  "scripts": {
+    "build": "python3 -m pip install -r requirements.txt && python3 -m mkdocs build",
+    "dev": "python3 -m mkdocs serve",
+    "install-python": "python3 -m pip install -r requirements.txt"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=16.x"
+  }
+} 

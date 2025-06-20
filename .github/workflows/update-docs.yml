@@ -1,0 +1,47 @@
+name: Update Documentation
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Check for updates every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-submodules:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update submodules
+        run: |
+          git pull --rebase
+          git submodule update --remote --recursive
+          
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push changes
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Auto-update submodules"
+          git push
+
+      - name: Trigger Vercel deployment
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK }}" 
