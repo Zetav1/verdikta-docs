@@ -48,8 +48,8 @@ theme:
   font:
     text: Inter
     code: JetBrains Mono
-  favicon: overrides/assets/favicon.png
-  logo: overrides/assets/logo.png
+  favicon: assets/favicon.png
+  logo: assets/logo.png
   custom_dir: overrides
 
 # Plugins
