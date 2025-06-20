@@ -1,0 +1,9 @@
+[submodule "sources/arbiter"]
+	path = sources/arbiter
+	url = git@github.com:verdikta/verdikta-arbiter.git
+[submodule "sources/dispatcher"]
+	path = sources/dispatcher
+	url = git@github.com:verdikta/verdikta-dispatcher.git
+[submodule "sources/apps"]
+	path = sources/apps
+	url = git@github.com:verdikta/verdikta-applications.git
