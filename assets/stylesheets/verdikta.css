@@ -1,0 +1,70 @@
+/* Verdikta Documentation Site Custom Styles */
+
+:root {
+  --verdikta-primary: #1e3a8a;
+  --verdikta-secondary: #3b82f6;
+  --verdikta-accent: #06b6d4;
+}
+
+/* Custom primary colors */
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: var(--verdikta-primary);
+  --md-primary-fg-color--light: var(--verdikta-secondary);
+  --md-primary-fg-color--dark: #1e40af;
+  --md-accent-fg-color: var(--verdikta-accent);
+}
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: var(--verdikta-secondary);
+  --md-primary-fg-color--light: var(--verdikta-accent);
+  --md-primary-fg-color--dark: var(--verdikta-primary);
+  --md-accent-fg-color: var(--verdikta-accent);
+}
+
+/* Custom styling for cards */
+.md-typeset .grid.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+
+.md-typeset .grid.cards > * {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  transition: box-shadow 250ms;
+}
+
+.md-typeset .grid.cards > *:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-badge.stable {
+  background-color: #22c55e;
+  color: white;
+}
+
+.status-badge.beta {
+  background-color: #f59e0b;
+  color: white;
+}
+
+.status-badge.alpha {
+  background-color: #ef4444;
+  color: white;
+}
+
+.status-badge.planned {
+  background-color: #6b7280;
+  color: white;
+} 
