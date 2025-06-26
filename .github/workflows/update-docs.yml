@@ -60,6 +60,12 @@ jobs:
           ls -la
           ls -la site/ || echo "site directory not found"
 
+      - name: Copy Vercel config to site directory
+        run: |
+          cp vercel.json site/
+          echo "Vercel config copied to site directory:"
+          cat site/vercel.json
+
       - name: Install Vercel CLI
         run: npm install -g vercel
 
