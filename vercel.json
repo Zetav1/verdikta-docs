@@ -1,6 +1,6 @@
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "mkdocs build",
   "outputDirectory": "site",
-  "installCommand": "npm install",
+  "installCommand": "pip install -r requirements.txt",
   "framework": null
 } 
