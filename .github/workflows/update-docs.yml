@@ -19,6 +19,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update submodules
+        continue-on-error: true
         run: |
           git pull --rebase
           git submodule update --remote --recursive
@@ -34,6 +35,7 @@ jobs:
 
       - name: Commit and push changes
         if: steps.changes.outputs.changed == 'true'
+        continue-on-error: true
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
@@ -41,7 +43,6 @@ jobs:
           git commit -m "Auto-update submodules"
           git push
 
-      - name: Trigger Vercel deployment
-        if: steps.changes.outputs.changed == 'true'
+      - name: Always trigger Vercel deployment
         run: |
           curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK }}" 
