@@ -62,6 +62,14 @@ jobs:
           npm init -y
           npm install solidity-docgen solc@0.8.19 --save-dev
           
+          # Debug: Show what contract directories exist
+          echo "=== Contract Directory Discovery ==="
+          echo "Dispatcher contracts:"
+          find sources/dispatcher -name "*.sol" -type f 2>/dev/null || echo "No .sol files found in dispatcher"
+          echo "Arbiter contracts:"
+          find sources/arbiter -name "*.sol" -type f 2>/dev/null || echo "No .sol files found in arbiter"
+          echo "=================================="
+          
           # Generate docs for dispatcher contracts
           if [ -d "sources/dispatcher/reputationBasedAggregator/contracts" ]; then
             echo "Generating dispatcher contract documentation..."
@@ -89,8 +97,18 @@ jobs:
             # Create API generated directory
             mkdir -p ./docs/api/generated
             
-            # Generate documentation with error handling
-            npx solidity-docgen || echo "Warning: solidity-docgen failed for dispatcher contracts"
+            # Check if contracts exist first
+            if [ -d "./reputationBasedAggregator/contracts" ] && [ -n "$(find ./reputationBasedAggregator/contracts -name '*.sol' 2>/dev/null)" ]; then
+              echo "Found Solidity contracts, generating documentation..."
+              npx --yes solidity-docgen || echo "Warning: solidity-docgen failed for dispatcher contracts"
+            else
+              echo "No Solidity contracts found in ./reputationBasedAggregator/contracts"
+              # Create placeholder API documentation
+              mkdir -p ./docs/api/generated
+              echo "# Contract API Documentation" > ./docs/api/generated/index.md
+              echo "" >> ./docs/api/generated/index.md
+              echo "Auto-generated contract documentation will appear here when contracts contain NatSpec comments." >> ./docs/api/generated/index.md
+            fi
             
             # List generated files for debugging
             echo "Generated dispatcher docs:"
@@ -123,8 +141,18 @@ jobs:
             # Create output directory
             mkdir -p ../installer/docs/docs/api/generated
             
-            # Generate documentation with error handling
-            npx solidity-docgen || echo "Warning: solidity-docgen failed for arbiter contracts"
+            # Check if contracts exist first
+            if [ -d "./contracts" ] && [ -n "$(find ./contracts -name '*.sol' 2>/dev/null)" ]; then
+              echo "Found Solidity contracts, generating documentation..."
+              npx --yes solidity-docgen || echo "Warning: solidity-docgen failed for arbiter contracts"
+            else
+              echo "No Solidity contracts found in ./contracts"
+              # Create placeholder API documentation
+              mkdir -p ../installer/docs/docs/api/generated
+              echo "# Arbiter Contract API Documentation" > ../installer/docs/docs/api/generated/index.md
+              echo "" >> ../installer/docs/docs/api/generated/index.md
+              echo "Auto-generated arbiter contract documentation will appear here when contracts contain NatSpec comments." >> ../installer/docs/docs/api/generated/index.md
+            fi
             
             # List generated files for debugging
             echo "Generated arbiter docs:"
