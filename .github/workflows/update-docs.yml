@@ -58,212 +58,31 @@ jobs:
 
       - name: Generate Smart Contract Documentation
         run: |
-          # Install dependencies locally
-          npm init -y
-          npm install solidity-docgen solc@0.8.19 --save-dev
+          echo "=== Smart Contract NatSpec Documentation Generation ==="
           
-          # Debug: Show what contract directories exist
-          echo "=== Contract Directory Discovery ==="
-          echo "Dispatcher contracts:"
-          find sources/dispatcher -name "*.sol" -type f 2>/dev/null || echo "No .sol files found in dispatcher"
-          echo "Dispatcher Hardhat configs:"
-          find sources/dispatcher -name "hardhat.config.*" -type f 2>/dev/null || echo "No Hardhat configs found in dispatcher"
-          echo "Arbiter contracts:"
-          find sources/arbiter -name "*.sol" -type f 2>/dev/null || echo "No .sol files found in arbiter"
-          echo "Arbiter Hardhat configs:"
-          find sources/arbiter -name "hardhat.config.*" -type f 2>/dev/null || echo "No Hardhat configs found in arbiter"
-          echo "=================================="
+          # Make the NatSpec generator script executable
+          chmod +x scripts/generate-natspec-docs.js
           
           # Generate docs for dispatcher contracts
-          if [ -d "sources/dispatcher/reputationBasedAggregator/contracts" ]; then
-            echo "Generating dispatcher contract documentation..."
-            cd sources/dispatcher
-            
-            # Create package.json if it doesn't exist
-            if [ ! -f "package.json" ]; then
-              npm init -y
-            fi
-            
-            # Install Hardhat documentation plugins
-            npm install hardhat @primitivefi/hardhat-dodoc hardhat-docgen --save-dev
-            
-            # Check if this is a Hardhat project
-            if [ -f "hardhat.config.js" ] || [ -f "hardhat.config.ts" ]; then
-              echo "Found Hardhat project, using Hardhat documentation tools..."
-              
-              # Try Hardhat-based documentation generation
-              npx hardhat docgen 2>/dev/null || \
-              npx hardhat dodoc 2>/dev/null || \
-              echo "Hardhat documentation plugins not configured, falling back to simple parsing"
-            else
-              echo "Not a Hardhat project, using simple documentation generation..."
-            fi
-            
-            # Create API generated directory
-            mkdir -p ./docs/api/generated
-            
-            # Check if contracts exist first
-            if [ -d "./reputationBasedAggregator/contracts" ] && [ -n "$(find ./reputationBasedAggregator/contracts -name '*.sol' 2>/dev/null)" ]; then
-              echo "Found Solidity contracts, generating documentation..."
-              
-              # If Hardhat tools didn't work, create simple contract listing
-              {
-                echo "Creating simple contract documentation..."
-                mkdir -p ./docs/api/generated
-                echo "# Dispatcher Smart Contract API" > ./docs/api/generated/index.md
-                echo "" >> ./docs/api/generated/index.md
-                echo "## Available Contracts" >> ./docs/api/generated/index.md
-                echo "" >> ./docs/api/generated/index.md
-                
-                for contract in ./reputationBasedAggregator/contracts/*.sol; do
-                  if [ -f "$contract" ]; then
-                    contract_name=$(basename "$contract" .sol)
-                    echo "### $contract_name" >> ./docs/api/generated/index.md
-                    echo "" >> ./docs/api/generated/index.md
-                    echo "**File:** \`$(basename "$contract")\`" >> ./docs/api/generated/index.md
-                    echo "" >> ./docs/api/generated/index.md
-                    
-                    # Extract contract declaration and basic info
-                    grep -n "contract\|interface\|library" "$contract" | head -5 | while read line; do
-                      echo "\`\`\`solidity" >> ./docs/api/generated/index.md
-                      echo "$line" >> ./docs/api/generated/index.md
-                      echo "\`\`\`" >> ./docs/api/generated/index.md
-                      echo "" >> ./docs/api/generated/index.md
-                    done
-                  fi
-                done
-                
-                # Add singleton contracts
-                for contract in ./reputationBasedSingleton/contracts/*.sol; do
-                  if [ -f "$contract" ]; then
-                    contract_name=$(basename "$contract" .sol)
-                    echo "### $contract_name" >> ./docs/api/generated/index.md
-                    echo "" >> ./docs/api/generated/index.md
-                    echo "**File:** \`$(basename "$contract")\`" >> ./docs/api/generated/index.md
-                    echo "" >> ./docs/api/generated/index.md
-                    
-                    grep -n "contract\|interface\|library" "$contract" | head -5 | while read line; do
-                      echo "\`\`\`solidity" >> ./docs/api/generated/index.md
-                      echo "$line" >> ./docs/api/generated/index.md
-                      echo "\`\`\`" >> ./docs/api/generated/index.md
-                      echo "" >> ./docs/api/generated/index.md
-                    done
-                  fi
-                done
-                
-                # Add arbiter operator contracts
-                for contract in ./arbiterOperator/contracts/*.sol; do
-                  if [ -f "$contract" ]; then
-                    contract_name=$(basename "$contract" .sol)
-                    echo "### $contract_name" >> ./docs/api/generated/index.md
-                    echo "" >> ./docs/api/generated/index.md
-                    echo "**File:** \`$(basename "$contract")\`" >> ./docs/api/generated/index.md
-                    echo "" >> ./docs/api/generated/index.md
-                    
-                    grep -n "contract\|interface\|library" "$contract" | head -5 | while read line; do
-                      echo "\`\`\`solidity" >> ./docs/api/generated/index.md
-                      echo "$line" >> ./docs/api/generated/index.md
-                      echo "\`\`\`" >> ./docs/api/generated/index.md
-                      echo "" >> ./docs/api/generated/index.md
-                    done
-                  fi
-                done
-                
-                echo "" >> ./docs/api/generated/index.md
-                echo "---" >> ./docs/api/generated/index.md
-                echo "*Auto-generated from contract source files*" >> ./docs/api/generated/index.md
-              }
-            else
-              echo "No Solidity contracts found in ./reputationBasedAggregator/contracts"
-              # Create placeholder API documentation
-              mkdir -p ./docs/api/generated
-              echo "# Contract API Documentation" > ./docs/api/generated/index.md
-              echo "" >> ./docs/api/generated/index.md
-              echo "Auto-generated contract documentation will appear here when contracts contain NatSpec comments." >> ./docs/api/generated/index.md
-            fi
-            
-            # List generated files for debugging
-            echo "Generated dispatcher docs:"
-            ls -la ./docs/api/generated/ || echo "No files generated"
-            
-            cd ../..
+          if [ -d "sources/dispatcher" ]; then
+            echo "📄 Generating Dispatcher Contract Documentation..."
+            node scripts/generate-natspec-docs.js \
+              "sources/dispatcher" \
+              "sources/dispatcher/docs/api/generated/index.md" \
+              "Verdikta Dispatcher Smart Contracts"
           fi
           
           # Generate docs for arbiter contracts if they exist
           if [ -d "sources/arbiter/arbiter-operator/contracts" ]; then
-            echo "Generating arbiter contract documentation..."
-            cd sources/arbiter/arbiter-operator
-            
-            # Create package.json if it doesn't exist
-            if [ ! -f "package.json" ]; then
-              npm init -y
-            fi
-            
-            # Install Hardhat documentation plugins  
-            npm install hardhat @primitivefi/hardhat-dodoc hardhat-docgen --save-dev
-            
-            # Check if this is a Hardhat project
-            if [ -f "hardhat.config.js" ] || [ -f "hardhat.config.ts" ]; then
-              echo "Found Hardhat project, using Hardhat documentation tools..."
-              
-              # Try Hardhat-based documentation generation
-              npx hardhat docgen 2>/dev/null || \
-              npx hardhat dodoc 2>/dev/null || \
-              echo "Hardhat documentation plugins not configured, falling back to simple parsing"
-            else
-              echo "Not a Hardhat project, using simple documentation generation..."
-            fi
-            
-            # Create output directory
-            mkdir -p ../installer/docs/docs/api/generated
-            
-            # Check if contracts exist first
-            if [ -d "./contracts" ] && [ -n "$(find ./contracts -name '*.sol' 2>/dev/null)" ]; then
-              echo "Found Solidity contracts, generating documentation..."
-              
-              # Create simple arbiter contract documentation
-              mkdir -p ../installer/docs/docs/api/generated
-              echo "# Arbiter Smart Contract API" > ../installer/docs/docs/api/generated/index.md
-              echo "" >> ../installer/docs/docs/api/generated/index.md
-              echo "## Available Contracts" >> ../installer/docs/docs/api/generated/index.md
-              echo "" >> ../installer/docs/docs/api/generated/index.md
-              
-              for contract in ./contracts/*.sol; do
-                if [ -f "$contract" ]; then
-                  contract_name=$(basename "$contract" .sol)
-                  echo "### $contract_name" >> ../installer/docs/docs/api/generated/index.md
-                  echo "" >> ../installer/docs/docs/api/generated/index.md
-                  echo "**File:** \`$(basename "$contract")\`" >> ../installer/docs/docs/api/generated/index.md
-                  echo "" >> ../installer/docs/docs/api/generated/index.md
-                  
-                  # Extract contract declaration and basic info
-                  grep -n "contract\|interface\|library" "$contract" | head -5 | while read line; do
-                    echo "\`\`\`solidity" >> ../installer/docs/docs/api/generated/index.md
-                    echo "$line" >> ../installer/docs/docs/api/generated/index.md
-                    echo "\`\`\`" >> ../installer/docs/docs/api/generated/index.md
-                    echo "" >> ../installer/docs/docs/api/generated/index.md
-                  done
-                fi
-              done
-              
-              echo "" >> ../installer/docs/docs/api/generated/index.md
-              echo "---" >> ../installer/docs/docs/api/generated/index.md
-              echo "*Auto-generated from contract source files*" >> ../installer/docs/docs/api/generated/index.md
-            else
-              echo "No Solidity contracts found in ./contracts"
-              # Create placeholder API documentation
-              mkdir -p ../installer/docs/docs/api/generated
-              echo "# Arbiter Contract API Documentation" > ../installer/docs/docs/api/generated/index.md
-              echo "" >> ../installer/docs/docs/api/generated/index.md
-              echo "Auto-generated arbiter contract documentation will appear here when contracts contain NatSpec comments." >> ../installer/docs/docs/api/generated/index.md
-            fi
-            
-            # List generated files for debugging
-            echo "Generated arbiter docs:"
-            ls -la ../installer/docs/docs/api/generated/ || echo "No files generated"
-            
-            cd ../../..
+            echo "📄 Generating Arbiter Contract Documentation..."
+            mkdir -p "sources/arbiter/installer/docs/docs/api/generated"
+            node scripts/generate-natspec-docs.js \
+              "sources/arbiter/arbiter-operator/contracts" \
+              "sources/arbiter/installer/docs/docs/api/generated/index.md" \
+              "Verdikta Arbiter Smart Contracts"
           fi
+          
+          echo "✅ Smart Contract Documentation Generation Complete"
 
       - name: Build documentation
         run: |
