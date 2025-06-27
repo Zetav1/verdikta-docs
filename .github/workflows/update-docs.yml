@@ -58,27 +58,50 @@ jobs:
 
       - name: Generate Smart Contract Documentation
         run: |
-          # Install solidity-docgen globally
-          npm install -g solidity-docgen
+          # Install dependencies locally
+          npm init -y
+          npm install solidity-docgen solc@0.8.19 --save-dev
           
           # Generate docs for dispatcher contracts
           if [ -d "sources/dispatcher/reputationBasedAggregator/contracts" ]; then
             echo "Generating dispatcher contract documentation..."
             cd sources/dispatcher
             
-            # Create docgen config if it doesn't exist
-            cat > docgen.json << 'EOF'
-          {
-            "outputDir": "./docs/api/generated",
-            "pages": "files",
-            "exclude": ["test", "mock"],
-            "sourcesDir": "./reputationBasedAggregator/contracts",
-            "templates": "./docs/templates"
-          }
-          EOF
+            # Create package.json if it doesn't exist
+            if [ ! -f "package.json" ]; then
+              npm init -y
+            fi
             
-            # Generate documentation
-            npx solidity-docgen --solc-module solc-0.8.19
+            # Install dependencies in dispatcher directory
+            npm install solidity-docgen solc@0.8.19 --save-dev
+            
+            # Create basic docgen config
+            cat > .solidity-docgen.js << 'EOF'
+module.exports = {
+  sourcesDir: './reputationBasedAggregator/contracts',
+  outputDir: './docs/api/generated',
+  templates: './docs/templates',
+  pages: 'files',
+  exclude: ['test/**/*', 'mocks/**/*'],
+  solcSettings: {
+    optimizer: {
+      enabled: true,
+      runs: 200
+    }
+  }
+};
+EOF
+            
+            # Create API generated directory
+            mkdir -p ./docs/api/generated
+            
+            # Generate documentation with error handling
+            npx solidity-docgen || echo "Warning: solidity-docgen failed for dispatcher contracts"
+            
+            # List generated files for debugging
+            echo "Generated dispatcher docs:"
+            ls -la ./docs/api/generated/ || echo "No files generated"
+            
             cd ../..
           fi
           
@@ -87,16 +110,34 @@ jobs:
             echo "Generating arbiter contract documentation..."
             cd sources/arbiter/arbiter-operator
             
-            cat > docgen.json << 'EOF'
-          {
-            "outputDir": "../installer/docs/docs/api/generated",
-            "pages": "files",
-            "exclude": ["test", "mock"],
-            "sourcesDir": "./contracts"
-          }
-          EOF
+            # Create package.json if it doesn't exist
+            if [ ! -f "package.json" ]; then
+              npm init -y
+            fi
             
-            npx solidity-docgen --solc-module solc-0.8.19
+            # Install dependencies
+            npm install solidity-docgen solc@0.8.19 --save-dev
+            
+            # Create docgen config
+            cat > .solidity-docgen.js << 'EOF'
+module.exports = {
+  sourcesDir: './contracts',
+  outputDir: '../installer/docs/docs/api/generated',
+  pages: 'files',
+  exclude: ['test/**/*', 'mocks/**/*']
+};
+EOF
+            
+            # Create output directory
+            mkdir -p ../installer/docs/docs/api/generated
+            
+            # Generate documentation with error handling
+            npx solidity-docgen || echo "Warning: solidity-docgen failed for arbiter contracts"
+            
+            # List generated files for debugging
+            echo "Generated arbiter docs:"
+            ls -la ../installer/docs/docs/api/generated/ || echo "No files generated"
+            
             cd ../../..
           fi
 
