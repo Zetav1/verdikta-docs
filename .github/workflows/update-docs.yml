@@ -100,7 +100,81 @@ jobs:
             # Check if contracts exist first
             if [ -d "./reputationBasedAggregator/contracts" ] && [ -n "$(find ./reputationBasedAggregator/contracts -name '*.sol' 2>/dev/null)" ]; then
               echo "Found Solidity contracts, generating documentation..."
-              npx --yes solidity-docgen || echo "Warning: solidity-docgen failed for dispatcher contracts"
+              
+              # Try multiple approaches for documentation generation
+              echo "Attempting solidity-docgen..."
+              
+              # Method 1: Direct node execution
+              node_modules/.bin/solidity-docgen 2>/dev/null || \
+              # Method 2: npx with explicit package
+              npx --yes @primitivefi/hardhat-dodoc 2>/dev/null || \
+              # Method 3: Simple contract listing
+              {
+                echo "Creating simple contract documentation..."
+                mkdir -p ./docs/api/generated
+                echo "# Dispatcher Smart Contract API" > ./docs/api/generated/index.md
+                echo "" >> ./docs/api/generated/index.md
+                echo "## Available Contracts" >> ./docs/api/generated/index.md
+                echo "" >> ./docs/api/generated/index.md
+                
+                for contract in ./reputationBasedAggregator/contracts/*.sol; do
+                  if [ -f "$contract" ]; then
+                    contract_name=$(basename "$contract" .sol)
+                    echo "### $contract_name" >> ./docs/api/generated/index.md
+                    echo "" >> ./docs/api/generated/index.md
+                    echo "**File:** \`$(basename "$contract")\`" >> ./docs/api/generated/index.md
+                    echo "" >> ./docs/api/generated/index.md
+                    
+                    # Extract contract declaration and basic info
+                    grep -n "contract\|interface\|library" "$contract" | head -5 | while read line; do
+                      echo "\`\`\`solidity" >> ./docs/api/generated/index.md
+                      echo "$line" >> ./docs/api/generated/index.md
+                      echo "\`\`\`" >> ./docs/api/generated/index.md
+                      echo "" >> ./docs/api/generated/index.md
+                    done
+                  fi
+                done
+                
+                # Add singleton contracts
+                for contract in ./reputationBasedSingleton/contracts/*.sol; do
+                  if [ -f "$contract" ]; then
+                    contract_name=$(basename "$contract" .sol)
+                    echo "### $contract_name" >> ./docs/api/generated/index.md
+                    echo "" >> ./docs/api/generated/index.md
+                    echo "**File:** \`$(basename "$contract")\`" >> ./docs/api/generated/index.md
+                    echo "" >> ./docs/api/generated/index.md
+                    
+                    grep -n "contract\|interface\|library" "$contract" | head -5 | while read line; do
+                      echo "\`\`\`solidity" >> ./docs/api/generated/index.md
+                      echo "$line" >> ./docs/api/generated/index.md
+                      echo "\`\`\`" >> ./docs/api/generated/index.md
+                      echo "" >> ./docs/api/generated/index.md
+                    done
+                  fi
+                done
+                
+                # Add arbiter operator contracts
+                for contract in ./arbiterOperator/contracts/*.sol; do
+                  if [ -f "$contract" ]; then
+                    contract_name=$(basename "$contract" .sol)
+                    echo "### $contract_name" >> ./docs/api/generated/index.md
+                    echo "" >> ./docs/api/generated/index.md
+                    echo "**File:** \`$(basename "$contract")\`" >> ./docs/api/generated/index.md
+                    echo "" >> ./docs/api/generated/index.md
+                    
+                    grep -n "contract\|interface\|library" "$contract" | head -5 | while read line; do
+                      echo "\`\`\`solidity" >> ./docs/api/generated/index.md
+                      echo "$line" >> ./docs/api/generated/index.md
+                      echo "\`\`\`" >> ./docs/api/generated/index.md
+                      echo "" >> ./docs/api/generated/index.md
+                    done
+                  fi
+                done
+                
+                echo "" >> ./docs/api/generated/index.md
+                echo "---" >> ./docs/api/generated/index.md
+                echo "*Auto-generated from contract source files*" >> ./docs/api/generated/index.md
+              }
             else
               echo "No Solidity contracts found in ./reputationBasedAggregator/contracts"
               # Create placeholder API documentation
@@ -144,7 +218,35 @@ jobs:
             # Check if contracts exist first
             if [ -d "./contracts" ] && [ -n "$(find ./contracts -name '*.sol' 2>/dev/null)" ]; then
               echo "Found Solidity contracts, generating documentation..."
-              npx --yes solidity-docgen || echo "Warning: solidity-docgen failed for arbiter contracts"
+              
+              # Create simple arbiter contract documentation
+              mkdir -p ../installer/docs/docs/api/generated
+              echo "# Arbiter Smart Contract API" > ../installer/docs/docs/api/generated/index.md
+              echo "" >> ../installer/docs/docs/api/generated/index.md
+              echo "## Available Contracts" >> ../installer/docs/docs/api/generated/index.md
+              echo "" >> ../installer/docs/docs/api/generated/index.md
+              
+              for contract in ./contracts/*.sol; do
+                if [ -f "$contract" ]; then
+                  contract_name=$(basename "$contract" .sol)
+                  echo "### $contract_name" >> ../installer/docs/docs/api/generated/index.md
+                  echo "" >> ../installer/docs/docs/api/generated/index.md
+                  echo "**File:** \`$(basename "$contract")\`" >> ../installer/docs/docs/api/generated/index.md
+                  echo "" >> ../installer/docs/docs/api/generated/index.md
+                  
+                  # Extract contract declaration and basic info
+                  grep -n "contract\|interface\|library" "$contract" | head -5 | while read line; do
+                    echo "\`\`\`solidity" >> ../installer/docs/docs/api/generated/index.md
+                    echo "$line" >> ../installer/docs/docs/api/generated/index.md
+                    echo "\`\`\`" >> ../installer/docs/docs/api/generated/index.md
+                    echo "" >> ../installer/docs/docs/api/generated/index.md
+                  done
+                fi
+              done
+              
+              echo "" >> ../installer/docs/docs/api/generated/index.md
+              echo "---" >> ../installer/docs/docs/api/generated/index.md
+              echo "*Auto-generated from contract source files*" >> ../installer/docs/docs/api/generated/index.md
             else
               echo "No Solidity contracts found in ./contracts"
               # Create placeholder API documentation
