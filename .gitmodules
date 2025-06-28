@@ -7,3 +7,6 @@
 [submodule "sources/apps"]
 	path = sources/apps
 	url = git@github.com:verdikta/verdikta-applications.git
+[submodule "sources/common"]
+	path = sources/common
+	url = git@github.com:verdikta/verdikta-common.git
