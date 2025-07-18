@@ -1,8 +1,6 @@
 {
-  "version": 2,
-  "github": {
-    "silent": true
-  },
-  "cleanUrls": true,
-  "trailingSlash": false
+  "buildCommand": null,
+  "installCommand": null,
+  "outputDirectory": ".",
+  "framework": null
 } 
