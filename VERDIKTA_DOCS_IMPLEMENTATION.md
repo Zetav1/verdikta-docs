@@ -505,35 +505,42 @@ Before the monorepo can work, each source repository needs proper `docs/` struct
 
 !!! important "Documentation Structure Consistency"
     
-    **Critical**: Every source repo must have exactly one `/docs/` folder at its root, and all subfolders must live under that. This simplifies future migration and automation. Store images and diagrams in `/docs/_assets/` within each repository.
+    **Critical**: Every source repo must have a consistent, flattened `/docs/` structure (no nested docs/docs folders). The monorepo plugin requires uniform directory patterns across all submodules to function properly. Store images and diagrams in `/docs/images/` or `/docs/_assets/` within each repository.
 
-#### 4.1 Verdikta Arbiter Repository
+!!! warning "Monorepo Plugin Requirements"
+    
+    The mkdocs-monorepo-plugin expects consistent directory structures. If some repositories have nested `docs/docs/` while others have flat `docs/`, the plugin will fail to discover content. All repositories must be flattened to the same pattern.
+
+#### 4.1 Verdikta Arbiter Repository (Flattening Required)
 
 ```bash
 # In verdikta-arbiter repository
-mkdir -p docs/installer
-# Move existing installer/docs/docs/* content to docs/installer/
+# Flatten the nested docs/docs structure to just docs/
+cd installer
+mv docs/docs/* docs/
+rmdir docs/docs
+# Update mkdocs.yml to reflect new flat structure
 # Update any internal links to reflect new paths
 ```
 
 #### 4.2 Other Repositories
 
-For each of the other repositories, create the following structure:
+Verify and ensure each repository has a flattened docs structure:
 
 ```bash
-# verdikta-dispatcher
-mkdir -p docs/contracts
-mkdir -p docs/deployment
+# verdikta-dispatcher (should already be flat)
+# Verify: docs/contracts/, docs/api/, docs/examples/, etc.
 
-# verdikta-applications  
-mkdir -p docs/api
-mkdir -p docs/sdk
-mkdir -p docs/examples
+# verdikta-applications (already flattened)
+# Structure: docs/index.md, docs/user-guide.md, docs/example-frontend/, etc.
 
-# verdikta-common
-mkdir -p docs/integrations
-mkdir -p docs/utilities
+# verdikta-common (should already be flat)  
+# Verify: docs/index.md, docs/api/, docs/examples.md, etc.
 ```
+
+!!! note "Structure Verification"
+    
+    Each repository should have documentation directly under `/docs/` with no nested `/docs/docs/` folders. If any repository still has nested structures, flatten them using the same approach as the arbiter repository.
 
 !!! tip "Future Enhancement: Documentation CI"
     
@@ -755,6 +762,33 @@ After implementation, you should have:
 4. **Links broken**: Update internal links to use new paths
 5. **Vercel deploy fails**: Check build logs and configuration
 6. **CI pip install fails**: Try running `pip install --upgrade pip setuptools wheel` first to ensure dependencies build cleanly
+7. **Monorepo plugin not finding content**: 
+   - Check that all submodules have consistent flattened `docs/` structures
+   - Ensure no nested `docs/docs/` folders exist
+   - Verify submodule pointers are up-to-date with `git submodule status`
+   - Run `find sources -name "*.md" -path "*/docs/*"` to verify content discovery
+
+### Monorepo Plugin Structure Requirements
+
+!!! critical "Consistency is Key"
+    
+    The mkdocs-monorepo-plugin requires **identical directory patterns** across all submodules:
+    
+    ✅ **Correct**: All repos have flat `docs/` structure
+    ```
+    sources/arbiter/installer/docs/index.md
+    sources/apps/docs/index.md  
+    sources/common/docs/index.md
+    sources/dispatcher/docs/index.md
+    ```
+    
+    ❌ **Incorrect**: Mixed nested and flat structures
+    ```
+    sources/arbiter/installer/docs/docs/index.md  ← nested
+    sources/apps/docs/index.md                     ← flat
+    ```
+    
+    If any repository has inconsistent structure, the plugin will fail to discover content in ALL repositories.
 
 ### Support
 

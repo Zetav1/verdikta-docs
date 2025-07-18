@@ -25,8 +25,13 @@ verdikta-docs/                 ← This repository
 │   └── images/
 └── sources/                   ← Git submodules
     ├── arbiter/               ← verdikta-arbiter repo
+    │   └── installer/docs/    ← Flattened docs structure
     ├── dispatcher/            ← verdikta-dispatcher repo
-    └── apps/                  ← verdikta-applications repo
+    │   └── docs/              ← Flattened docs structure
+    ├── apps/                  ← verdikta-applications repo
+    │   └── docs/              ← Flattened docs structure
+    └── common/                ← verdikta-common repo
+        └── docs/              ← Flattened docs structure
 ```
 
 ## 🚀 Quick Start
@@ -102,10 +107,11 @@ git push
 ### Content Structure
 
 Each source repository should maintain:
-- A single `docs/` folder at the root level
+- A single flattened `docs/` folder (no nested docs/docs structure)
 - Markdown files with proper frontmatter
-- Images in `docs/_assets/` subdirectory
+- Images in `docs/images/` or `docs/_assets/` subdirectory
 - Relative links for navigation
+- Consistent structure across all repositories for monorepo plugin compatibility
 
 ### Style Guide
 

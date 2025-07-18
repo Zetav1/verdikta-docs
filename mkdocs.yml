@@ -74,16 +74,6 @@ extra:
 extra_css:
   - assets/stylesheets/verdikta.css
 
-# Static files (this ensures assets are copied)
-extra:
-  annotate:
-    json: [.s2]
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/verdikta
-    - icon: fontawesome/brands/twitter
-      link: https://twitter.com/verdikta
-
 # Extensions
 markdown_extensions:
   - abbr

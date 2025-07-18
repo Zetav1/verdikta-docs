@@ -24,7 +24,7 @@ Verdikta is a decentralized oracle system that provides AI-powered dispute resol
 
     Build applications using Verdikta's APIs and SDKs
 
-    [:octicons-arrow-right-24: Developer Guide](apps/quickstart.md)
+    [:octicons-arrow-right-24: Developer Guide](apps/index.md)
 
 -   :fontawesome-solid-file-contract:{ .lg .middle } **Smart Contracts**
 
@@ -66,8 +66,8 @@ graph TB
 Choose your path based on your role:
 
 - **Node Operators**: Start with [Prerequisites](arbiter/installer/prerequisites.md) then follow our [Quick Start Guide](arbiter/installer/quick-start.md)
-- **Developers**: Jump into our [Developer Quick Start](apps/quickstart.md)
-- **Smart Contract Developers**: Review our [Contract Overview](dispatcher/contracts/index.md)
+- **Developers**: Jump into our [Developer Quick Start](apps/index.md)
+- **Smart Contract Developers**: Review our [Contract Overview](dispatcher/index.md)
 
 ## Key Features
 
