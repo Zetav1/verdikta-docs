@@ -1,184 +1,85 @@
 # Verdikta Documentation
 
-This repository contains the unified documentation site for the Verdikta ecosystem - a decentralized AI-powered dispute resolution platform built on blockchain technology.
-
-## 🌐 Live Site
-
-The documentation is available at: [docs.verdikta.org](https://docs.verdikta.org)
-
-## 📋 Overview
-
-This documentation site aggregates content from multiple Verdikta repositories using MkDocs with the monorepo plugin. The site automatically updates when source repositories change, providing a single source of truth for all Verdikta documentation.
+This repository hosts the unified documentation site for the Verdikta ecosystem at [docs.verdikta.org](https://docs.verdikta.org).
 
 ## 🏗️ Architecture
 
 ```
-verdikta-docs/                 ← This repository
-├── mkdocs.yml                 ← Main configuration
-├── requirements.txt           ← Python dependencies
-├── docs/                      ← Root-level docs
-│   ├── index.md               ← Homepage
-│   ├── overview/              ← High-level documentation
-│   └── changelog/             ← Release notes
-├── assets/                    ← Shared assets
-│   ├── stylesheets/
-│   └── images/
-└── sources/                   ← Git submodules
-    ├── arbiter/               ← verdikta-arbiter repo
-    │   └── installer/docs/    ← Flattened docs structure
-    ├── dispatcher/            ← verdikta-dispatcher repo
-    │   └── docs/              ← Flattened docs structure
-    ├── apps/                  ← verdikta-applications repo
-    │   └── docs/              ← Flattened docs structure
-    └── common/                ← verdikta-common repo
-        └── docs/              ← Flattened docs structure
+verdikta-docs/
+├── mkdocs.yml            ← Main configuration & navigation
+├── docs/                 ← Native documentation (overview, changelog)
+├── assets/               ← Shared images and stylesheets
+└── sources/              ← Git submodules (private repos)
+    ├── arbiter/          ← verdikta-arbiter → Node Operators docs
+    ├── apps/             ← verdikta-applications → Developers docs
+    ├── common/           ← verdikta-common → Common Library docs
+    └── dispatcher/       ← verdikta-dispatcher → Smart Contracts docs
 ```
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-- Python 3.8+
-- Git with submodule support
-
 ### Local Development
 
-1. **Clone the repository**:
-   ```bash
-   git clone --recursive https://github.com/verdikta/verdikta-docs.git
-   cd verdikta-docs
-   ```
+```bash
+# Clone with submodules
+git clone --recursive git@github.com:verdikta/verdikta-docs.git
+cd verdikta-docs
 
-2. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+# Install dependencies
+pip install -r requirements.txt
 
-3. **Serve locally**:
-   ```bash
-   mkdocs serve
-   ```
+# Serve locally
+mkdocs serve
+```
 
-4. **View the site**:
-   Open [http://localhost:8000](http://localhost:8000) in your browser
+View at [http://localhost:8000](http://localhost:8000)
 
-### Building for Production
+### Build for Production
 
 ```bash
 mkdocs build
 ```
 
-The built site will be in the `site/` directory.
+## 🔄 How It Works
 
-## 🔄 Content Updates
+1. **Source repositories** contain component-specific documentation in their `docs/` folders
+2. **Git submodules** link those docs into this repository
+3. **GitHub Actions** automatically updates submodules every 6 hours
+4. **MkDocs monorepo plugin** combines all docs into a single site
+5. **Vercel** hosts the built site at docs.verdikta.org
 
-### Automatic Updates
+## 📝 Contributing Documentation
 
-The site automatically updates when:
-- Source repositories push changes to their `docs/` folders
-- GitHub Actions runs every 6 hours to check for updates
-- Manual trigger via GitHub Actions workflow
-
-### Manual Updates
-
-To manually update submodules:
-
-```bash
-git submodule update --remote --recursive
-git add sources/
-git commit -m "Update documentation submodules"
-git push
-```
-
-## 📝 Contributing
-
-### Adding New Content
-
-#### To the Main Site
-1. Edit files in the `docs/` directory
-2. Update `mkdocs.yml` navigation if needed
-3. Test locally with `mkdocs serve`
-4. Submit a pull request
-
-#### To Component Documentation
-1. Edit files in the respective source repository's `docs/` folder
-2. The changes will automatically appear here when the submodules update
-
-### Content Structure
-
-Each source repository should maintain:
-- A single flattened `docs/` folder (no nested docs/docs structure)
-- Markdown files with proper frontmatter
-- Images in `docs/images/` or `docs/_assets/` subdirectory
-- Relative links for navigation
-- Consistent structure across all repositories for monorepo plugin compatibility
-
-### Style Guide
-
-- Use descriptive headings and subheadings
-- Include code examples with proper syntax highlighting
-- Add admonitions (tips, warnings, notes) for important information
-- Use consistent formatting and terminology
-
-## 🛠️ Technical Details
-
-### MkDocs Configuration
-
-The site uses:
-- **MkDocs Material**: Modern theme with advanced features
-- **Monorepo Plugin**: Aggregates content from multiple repositories
-- **Search Plugin**: Full-text search across all content
-- **Various Extensions**: Code highlighting, tables, admonitions, etc.
-
-### Deployment
-
-- **Hosting**: Vercel with automatic deployments
-- **Domain**: docs.verdikta.org
-- **SSL**: Automatic HTTPS with Vercel
-- **CDN**: Global edge caching for fast loading
-
-### Monitoring
-
-- **GitHub Actions**: Automated builds and updates
-- **Vercel Analytics**: Performance and usage metrics
-- **Error Tracking**: Build failures and broken links
+See **[CONTRIBUTING.md](CONTRIBUTING.md)** for detailed instructions on:
+- Adding native documentation to this repo
+- Adding documentation in submodule repositories
+- Connecting new docs to the main site
+- Local development and testing
 
 ## 📚 Documentation Sections
 
-### For Node Operators
-- Installation guides and prerequisites
-- Configuration and management
-- Troubleshooting and maintenance
-- Performance optimization
-
-### For Developers  
-- API documentation and examples
-- SDK integration guides
-- Smart contract interfaces
-- Testing and development tools
-
-### For Everyone
-- Project overview and architecture
-- Whitepapers and research
-- Changelog and release notes
-- Community resources
+| Section | Source | Description |
+|---------|--------|-------------|
+| **Node Operators** | `sources/arbiter/installer/docs/` | Installation, management, troubleshooting |
+| **Developers** | `sources/apps/docs/` | SDK, API, example applications |
+| **Common Library** | `sources/common/docs/` | Shared utilities, manifest specification |
+| **Smart Contracts** | `sources/dispatcher/docs/` | Contract integration, API reference |
+| **Overview** | `docs/overview/` | Architecture, whitepaper |
+| **Changelog** | `docs/changelog/` | Release notes |
 
 ## 🔗 Related Repositories
 
 - [verdikta-arbiter](https://github.com/verdikta/verdikta-arbiter) - Arbiter node software
 - [verdikta-dispatcher](https://github.com/verdikta/verdikta-dispatcher) - Smart contracts
 - [verdikta-applications](https://github.com/verdikta/verdikta-applications) - Example applications
+- [verdikta-common](https://github.com/verdikta/verdikta-common) - Shared utilities
 
 ## 📞 Support
 
 - **Documentation Issues**: [GitHub Issues](https://github.com/verdikta/verdikta-docs/issues)
 - **General Questions**: [Discord Community](https://discord.gg/verdikta)
-- **Email**: [docs@verdikta.org](mailto:docs@verdikta.org)
-
-## 📄 License
-
-This documentation is licensed under the [MIT License](LICENSE).
+- **Email**: [support@verdikta.org](mailto:support@verdikta.org)
 
 ---
 
-Built with ❤️ using [MkDocs Material](https://squidfunk.github.io/mkdocs-material/)
+Built with [MkDocs Material](https://squidfunk.github.io/mkdocs-material/)

@@ -49,7 +49,7 @@ These contracts are automatically processed for API documentation:
 1. **Trigger**: Push to `main` branch or every 6 hours
 2. **Process**: GitHub Actions extracts NatSpec from core contracts
 3. **Output**: Auto-generated API docs at `/dispatcher/contracts/api/generated/`
-4. **Deploy**: Automatically published to [docs.verdikta.com](https://docs.verdikta.com)
+4. **Deploy**: Automatically published to [docs.verdikta.org](https://docs.verdikta.org)
 
 ### Manual Documentation
 - Place additional docs in respective `docs/` directories
@@ -143,4 +143,4 @@ const coreContracts = [
 
 ---
 
-**Next Steps**: After adding documentation, push to `main` and check [docs.verdikta.com](https://docs.verdikta.com) for automatic updates. 
+**Next Steps**: After adding documentation, push to `main` and check [docs.verdikta.org](https://docs.verdikta.org) for automatic updates. 
