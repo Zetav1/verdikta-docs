@@ -16,7 +16,7 @@ Verdikta is a decentralized oracle system that provides AI-powered dispute resol
 
     Set up and manage Verdikta Arbiter Nodes for dispute resolution
 
-    [:octicons-arrow-right-24: Node Setup Guide](verdikta-arbiter-node-installation-guide/)
+    [:octicons-arrow-right-24: Node Setup Guide](verdikta-arbiter-node-installation-guide/index.md)
 
 -   :fontawesome-solid-code:{ .lg .middle } **Developers**
 
@@ -24,7 +24,7 @@ Verdikta is a decentralized oracle system that provides AI-powered dispute resol
 
     Build applications using Verdikta's APIs and SDKs
 
-    [:octicons-arrow-right-24: Developer Guide](apps/)
+    [:octicons-arrow-right-24: Developer Guide](apps/index.md)
 
 -   :fontawesome-solid-file-contract:{ .lg .middle } **Smart Contracts**
 
@@ -32,7 +32,7 @@ Verdikta is a decentralized oracle system that provides AI-powered dispute resol
 
     Integrate with Verdikta's on-chain components
 
-    [:octicons-arrow-right-24: Contract Docs](verdikta-dispatcher-smart-contracts/)
+    [:octicons-arrow-right-24: Contract Docs](verdikta-dispatcher-smart-contracts/index.md)
 
 -   :fontawesome-solid-puzzle-piece:{ .lg .middle } **Integrations**
 
@@ -40,7 +40,7 @@ Verdikta is a decentralized oracle system that provides AI-powered dispute resol
 
     Common utilities and integration patterns
 
-    [:octicons-arrow-right-24: Integration Guide](verdikta-common/)
+    [:octicons-arrow-right-24: Integration Guide](verdikta-common/index.md)
 
 </div>
 
@@ -65,9 +65,9 @@ graph TB
 
 Choose your path based on your role:
 
-- **Node Operators**: Start with [Prerequisites](verdikta-arbiter-node-installation-guide/prerequisites/) then follow our [Quick Start Guide](verdikta-arbiter-node-installation-guide/quick-start/)
-- **Developers**: Jump into our [Developer Quick Start](apps/)
-- **Smart Contract Developers**: Review our [Contract Overview](verdikta-dispatcher-smart-contracts/)
+- **Node Operators**: Start with [Prerequisites](verdikta-arbiter-node-installation-guide/prerequisites.md) then follow our [Quick Start Guide](verdikta-arbiter-node-installation-guide/quick-start.md)
+- **Developers**: Jump into our [Developer Quick Start](apps/index.md)
+- **Smart Contract Developers**: Review our [Contract Overview](verdikta-dispatcher-smart-contracts/index.md)
 
 ## Key Features
 

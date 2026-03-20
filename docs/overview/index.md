@@ -121,6 +121,6 @@ sequenceDiagram
 
 Ready to integrate Verdikta into your application or become a node operator?
 
-- **Developers**: Start with our [API documentation](../apps/)
-- **Node Operators**: Follow our [installation guide](../verdikta-arbiter-node-installation-guide/)
-- **Smart Contract Developers**: Review our [contract documentation](../verdikta-dispatcher-smart-contracts/) 
+- **Developers**: Start with our [API documentation](../apps/index.md)
+- **Node Operators**: Follow our [installation guide](../verdikta-arbiter-node-installation-guide/index.md)
+- **Smart Contract Developers**: Review our [contract documentation](../verdikta-dispatcher-smart-contracts/index.md)

@@ -6,10 +6,15 @@ site_url: https://docs.verdikta.org
 # Docs directory for main content
 docs_dir: docs
 
+# Avoid duplicate index/README collisions in included submodule docs
+exclude_docs: |
+  apps/README.md
+  verdikta-arbiter-node-installation-guide/README.md
+
 # Repository
 repo_name: verdikta/verdikta-docs
 repo_url: https://github.com/verdikta/verdikta-docs
-edit_uri: edit/main/
+edit_uri: edit/main/docs/
 
 # Configuration
 theme:
